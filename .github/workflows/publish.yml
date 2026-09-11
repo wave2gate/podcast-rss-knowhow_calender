@@ -1,0 +1,34 @@
+name: Publish Podcast Episodes
+
+on:
+  repository_dispatch:
+    types: [new_episode]
+  schedule:
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run publish script
+        run: python scripts/publish.py
+
+      - name: Commit and push updated feed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add feed.xml episodes_queue.json
+          git diff --staged --quiet || git commit -m "自動發布：更新 RSS feed [skip ci]"
+          git push
