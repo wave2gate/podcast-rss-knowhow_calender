@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" 
+     xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" 
+     xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>知識點日曆</title>
+    <link>https://wave2gate.github.io/podcast-rss-knowhow_calender/</link>
+    <description>備考求職 student community STEM-tech-club Podcast RSS feed</description>
+    <language>zh-tw</language>
+    <itunes:author>wave2gate</itunes:author>
+    <itunes:type>episodic</itunes:type>
+    <itunes:explicit>no</itunes:explicit>
+    <itunes:category text="Education"/>
+    <!-- 預設封面圖，後續可在 GitHub 上替換 cover.jpg 連結 -->
+    <itunes:image href="https://wave2gate.github.io/podcast-rss-knowhow_calender/cover.jpg"/>
+  </channel>
+</rss>
