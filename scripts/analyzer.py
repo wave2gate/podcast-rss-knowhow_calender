@@ -1,6 +1,7 @@
 """
 AI 播報稿生成
-模型鏈：Gemini 2.0 Flash → Gemini 1.5 Flash → Groq Llama3 → DeepSeek V3
+模型鏈：Gemini 2.5 Flash → Gemini 2.5 Flash-Lite → Groq Llama3 → DeepSeek V3
+模型名稱已根據 API key 實際可用清單確認
 """
 import logging, os, re, time
 import requests
@@ -39,12 +40,11 @@ def _build_prompt(items: list[dict], date: str) -> str:
 
 
 # ── Gemini ─────────────────────────────────────────────────────────────
-# 按優先順序嘗試的模型名稱（新 → 舊，遇到 404 自動降級）
+# 根據你的 API key 實際可用模型列表（已驗證）
 GEMINI_MODELS = [
-    "gemini-2.0-flash-lite",   # 最新免費版
-    "gemini-2.5-flash",        # 若帳號有權限
-    "gemini-1.5-flash",        # 最穩定備用
-    "gemini-1.5-flash-latest", # alias
+    "gemini-2.5-flash",       # 第一選擇：最新穩定版，免費額度充足
+    "gemini-2.5-flash-lite",  # 第二選擇：更快更省
+    "gemini-3.1-flash-lite",  # 第三選擇：備用
 ]
 
 def _gemini(prompt: str) -> str:
@@ -52,36 +52,43 @@ def _gemini(prompt: str) -> str:
     if not key:
         raise ValueError("GEMINI_API_KEY 未設定")
 
-    last_err = None
     for model in GEMINI_MODELS:
         url = (f"https://generativelanguage.googleapis.com/v1beta/"
                f"models/{model}:generateContent?key={key}")
         try:
             r = requests.post(url, json={
                 "contents": [{"parts": [{"text": prompt}]}],
-                "generationConfig": {"temperature": 0.4, "maxOutputTokens": 3000},
+                "generationConfig": {
+                    "temperature": 0.4,
+                    "maxOutputTokens": 3000,
+                },
             }, timeout=90)
 
             if r.status_code == 404:
-                log.warning(f"   Gemini {model}: 404，嘗試下一個模型...")
+                log.warning(f"   Gemini {model}: 404，嘗試下一個...")
                 continue
+
             r.raise_for_status()
             text = r.json()["candidates"][0]["content"]["parts"][0]["text"]
-            log.info(f"   ✓ Gemini 使用模型：{model}")
+            log.info(f"   ✓ Gemini 使用模型: {model}")
             return text
+
         except requests.HTTPError as e:
-            last_err = e
-            if "404" in str(e):
+            if r.status_code == 404:
                 continue
+            log.warning(f"   Gemini {model} HTTP 錯誤: {e}")
             raise
         except Exception as e:
-            last_err = e
+            log.warning(f"   Gemini {model} 錯誤: {e}")
             raise
 
-    raise RuntimeError(f"Gemini 所有模型均 404，請檢查 API key 權限。最後錯誤：{last_err}")
+    raise RuntimeError(
+        f"Gemini 所有模型均失敗，已嘗試: {GEMINI_MODELS}\n"
+        "請到 https://generativelanguage.googleapis.com/v1beta/models?key=你的KEY 確認可用模型"
+    )
 
 
-# ── Groq ───────────────────────────────────────────────────────────────
+# ── Groq（備用，免費）──────────────────────────────────────────────────
 def _groq(prompt: str) -> str:
     key = os.environ.get("GROQ_API_KEY", "")
     if not key:
@@ -89,16 +96,19 @@ def _groq(prompt: str) -> str:
     r = requests.post(
         "https://api.groq.com/openai/v1/chat/completions",
         headers={"Authorization": f"Bearer {key}"},
-        json={"model": "llama3-70b-8192",
-              "messages": [{"role": "user", "content": prompt}],
-              "temperature": 0.4, "max_tokens": 3000},
+        json={
+            "model": "llama3-70b-8192",
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.4,
+            "max_tokens": 3000,
+        },
         timeout=90,
     )
     r.raise_for_status()
     return r.json()["choices"][0]["message"]["content"]
 
 
-# ── DeepSeek ───────────────────────────────────────────────────────────
+# ── DeepSeek（第三備用）────────────────────────────────────────────────
 def _deepseek(prompt: str) -> str:
     key = os.environ.get("DEEPSEEK_API_KEY", "")
     if not key:
@@ -106,16 +116,19 @@ def _deepseek(prompt: str) -> str:
     r = requests.post(
         "https://api.deepseek.com/chat/completions",
         headers={"Authorization": f"Bearer {key}"},
-        json={"model": "deepseek-chat",
-              "messages": [{"role": "user", "content": prompt}],
-              "temperature": 0.4, "max_tokens": 3000},
+        json={
+            "model": "deepseek-chat",
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.4,
+            "max_tokens": 3000,
+        },
         timeout=90,
     )
     r.raise_for_status()
     return r.json()["choices"][0]["message"]["content"]
 
 
-# ── 主入口：自動降級 ────────────────────────────────────────────────────
+# ── 主入口：自動降級鏈 ─────────────────────────────────────────────────
 PROVIDERS = [
     ("Gemini",   _gemini,   "GEMINI_API_KEY"),
     ("Groq",     _groq,     "GROQ_API_KEY"),
@@ -125,9 +138,11 @@ PROVIDERS = [
 def build_script(items: list[dict], date: str) -> str:
     if not items:
         log.warning("   無新聞素材，生成預設播報稿")
-        return (f"各位聽眾朋友好，歡迎收聽美股科技晨報，今天是{date}。"
-                "由於今日數據抓取異常，暫無詳細新聞播報，請稍後查看文字版。"
-                "祝各位身體健康，闔家平安，神愛世人，耶穌愛您，我們明天見！")
+        return (
+            f"各位聽眾朋友好，歡迎收聽美股科技晨報，今天是{date}。"
+            "由於今日數據抓取異常，暫無詳細新聞播報，請稍後查看文字版。"
+            "祝各位身體健康，闔家平安，神愛世人，耶穌愛您，我們明天見！"
+        )
 
     prompt = _build_prompt(items, date)
 
