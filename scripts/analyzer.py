@@ -1,13 +1,12 @@
 """
 AI 播報稿生成
-鏈：Gemini Flash（免費）→ Groq Llama3（免費）→ DeepSeek V3（極低價）
+模型鏈：Gemini 2.0 Flash → Gemini 1.5 Flash → Groq Llama3 → DeepSeek V3
 """
-import json, logging, os, re, time
+import logging, os, re, time
 import requests
 
 log = logging.getLogger(__name__)
 
-# ── Prompt ───────────────────────────────────────────────────────────
 SYSTEM = """你是一位專業的台灣財經播客主持人，聲音沉穩、邏輯清晰。
 請把提供的新聞素材整理成一段完整的廣播播報稿。
 
@@ -20,11 +19,11 @@ SYSTEM = """你是一位專業的台灣財經播客主持人，聲音沉穩、�
 4. 結尾：風險提醒（市場波動來自技術面、消息面、機構資金等多重因素，
    請勿單憑新聞買賣股票，投資需謹慎）
 5. 最後祝福：「祝各位身體健康、投資順利，闔家平安，神愛世人，耶穌愛您，我們明天見！」
-6. 全程繁體中文口語，不用 Markdown 符號，不用括號，字數 1500–2000 字"""
+6. 全程繁體中文口語，不用 Markdown 符號，不用括號，字數 1200–1800 字"""
+
 
 def _build_prompt(items: list[dict], date: str) -> str:
     system = SYSTEM.replace("{date}", date)
-    # 按 source 分組
     groups: dict[str, list] = {}
     for it in items:
         groups.setdefault(it["source"], []).append(it)
@@ -38,21 +37,55 @@ def _build_prompt(items: list[dict], date: str) -> str:
                 lines.append(f"  {it['summary'][:200]}")
     return system + "\n\n" + "\n".join(lines)
 
-# ── 各 AI 呼叫 ───────────────────────────────────────────────────────
-def _gemini(prompt: str) -> str:
-    key = os.environ["GEMINI_API_KEY"]
-    url = (f"https://generativelanguage.googleapis.com/v1beta/"
-           f"models/gemini-2.0-flash:generateContent?key={key}")
-    body = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.4, "maxOutputTokens": 3000},
-    }
-    r = requests.post(url, json=body, timeout=90)
-    r.raise_for_status()
-    return r.json()["candidates"][0]["content"]["parts"][0]["text"]
 
+# ── Gemini ─────────────────────────────────────────────────────────────
+# 按優先順序嘗試的模型名稱（新 → 舊，遇到 404 自動降級）
+GEMINI_MODELS = [
+    "gemini-2.0-flash-lite",   # 最新免費版
+    "gemini-2.5-flash",        # 若帳號有權限
+    "gemini-1.5-flash",        # 最穩定備用
+    "gemini-1.5-flash-latest", # alias
+]
+
+def _gemini(prompt: str) -> str:
+    key = os.environ.get("GEMINI_API_KEY", "")
+    if not key:
+        raise ValueError("GEMINI_API_KEY 未設定")
+
+    last_err = None
+    for model in GEMINI_MODELS:
+        url = (f"https://generativelanguage.googleapis.com/v1beta/"
+               f"models/{model}:generateContent?key={key}")
+        try:
+            r = requests.post(url, json={
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {"temperature": 0.4, "maxOutputTokens": 3000},
+            }, timeout=90)
+
+            if r.status_code == 404:
+                log.warning(f"   Gemini {model}: 404，嘗試下一個模型...")
+                continue
+            r.raise_for_status()
+            text = r.json()["candidates"][0]["content"]["parts"][0]["text"]
+            log.info(f"   ✓ Gemini 使用模型：{model}")
+            return text
+        except requests.HTTPError as e:
+            last_err = e
+            if "404" in str(e):
+                continue
+            raise
+        except Exception as e:
+            last_err = e
+            raise
+
+    raise RuntimeError(f"Gemini 所有模型均 404，請檢查 API key 權限。最後錯誤：{last_err}")
+
+
+# ── Groq ───────────────────────────────────────────────────────────────
 def _groq(prompt: str) -> str:
-    key = os.environ["GROQ_API_KEY"]
+    key = os.environ.get("GROQ_API_KEY", "")
+    if not key:
+        raise ValueError("GROQ_API_KEY 未設定")
     r = requests.post(
         "https://api.groq.com/openai/v1/chat/completions",
         headers={"Authorization": f"Bearer {key}"},
@@ -64,8 +97,12 @@ def _groq(prompt: str) -> str:
     r.raise_for_status()
     return r.json()["choices"][0]["message"]["content"]
 
+
+# ── DeepSeek ───────────────────────────────────────────────────────────
 def _deepseek(prompt: str) -> str:
-    key = os.environ["DEEPSEEK_API_KEY"]
+    key = os.environ.get("DEEPSEEK_API_KEY", "")
+    if not key:
+        raise ValueError("DEEPSEEK_API_KEY 未設定")
     r = requests.post(
         "https://api.deepseek.com/chat/completions",
         headers={"Authorization": f"Bearer {key}"},
@@ -77,21 +114,31 @@ def _deepseek(prompt: str) -> str:
     r.raise_for_status()
     return r.json()["choices"][0]["message"]["content"]
 
+
+# ── 主入口：自動降級 ────────────────────────────────────────────────────
 PROVIDERS = [
-    ("Gemini Flash", _gemini,   "GEMINI_API_KEY"),
-    ("Groq Llama3",  _groq,     "GROQ_API_KEY"),
-    ("DeepSeek V3",  _deepseek, "DEEPSEEK_API_KEY"),
+    ("Gemini",   _gemini,   "GEMINI_API_KEY"),
+    ("Groq",     _groq,     "GROQ_API_KEY"),
+    ("DeepSeek", _deepseek, "DEEPSEEK_API_KEY"),
 ]
 
 def build_script(items: list[dict], date: str) -> str:
+    if not items:
+        log.warning("   無新聞素材，生成預設播報稿")
+        return (f"各位聽眾朋友好，歡迎收聽美股科技晨報，今天是{date}。"
+                "由於今日數據抓取異常，暫無詳細新聞播報，請稍後查看文字版。"
+                "祝各位身體健康，闔家平安，神愛世人，耶穌愛您，我們明天見！")
+
     prompt = _build_prompt(items, date)
+
     for name, fn, env_key in PROVIDERS:
         if not os.environ.get(env_key):
+            log.info(f"   {name}: 未設定 Key，跳過")
             continue
         try:
             log.info(f"   嘗試 {name}...")
             text = fn(prompt)
-            # 清理可能殘留的 Markdown
+            # 清理殘留 Markdown 符號
             text = re.sub(r"\*{1,2}(.+?)\*{1,2}", r"\1", text)
             text = re.sub(r"#{1,4}\s*", "", text)
             log.info(f"   ✓ {name} 完成，{len(text)} 字")
