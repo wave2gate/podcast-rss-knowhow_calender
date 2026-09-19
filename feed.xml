@@ -13,5 +13,17 @@
     <itunes:category text="Education"/>
     <!-- 預設封面圖，後續可在 GitHub 上替換 cover.jpg 連結 -->
     <itunes:image href="https://wave2gate.github.io/podcast-rss-knowhow_calender/cover.jpg"/>
-  </channel>
+  
+    <item>
+      <title>2026年9月19日 美股科技晨報</title>
+      <description>各位聽眾朋友好，歡迎收聽美股科技晨報，今天是 2026年9月19日，我是您的主持人。
+
+首先來看政治與宏觀經濟的最新動態，川普近期在社群媒體上公開表示，將禁止微軟新聞、CNN 以及 Politico 等主流媒體進入白宮，理由是這些媒體長期散布虛假新聞與謊言。這項舉動再度引發市場對於媒體產業監管與資訊透明度的討論，投資人需留意相關媒體股的波動風險。此外，川普也宣布美國計畫在格陵蘭島建立大規模軍事存在，作為與丹麥安全協議的一部分，儘管歐盟先前曾對此表示反對，但這項地緣政治動作仍值得關注。而在金融政策方面，聯準會官員凱文沃什近期針對利率政策發表了關鍵談話，市場正密切解讀其言論，揣測聯準會未來升息路徑</description>
+      <pubDate>Sat, 19 Sep 2026 00:42:18 +0000</pubDate>
+      <guid>https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260919.mp3</guid>
+      <enclosure url="https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260919.mp3" length="1556064" type="audio/mpeg"/>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
+    
+</channel>
 </rss>
