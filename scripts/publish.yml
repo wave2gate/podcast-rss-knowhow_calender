@@ -1,0 +1,53 @@
+name: Publish Podcast Episodes
+
+on:
+  repository_dispatch:
+    types: [new_episode]
+  schedule:
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安裝依賴
+        run: pip install feedparser requests edge-tts boto3
+
+      - name: Run main script
+        run: cd scripts && python main.py
+        env:
+          # ── AI（至少填一個）
+          GEMINI_API_KEY:       ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY:         ${{ secrets.GROQ_API_KEY }}
+          DEEPSEEK_API_KEY:     ${{ secrets.DEEPSEEK_API_KEY }}
+          # ── Cloudflare R2
+          R2_ACCOUNT_ID:        ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID:     ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET_NAME:       ${{ secrets.R2_BUCKET_NAME }}
+          R2_PUBLIC_URL:        ${{ secrets.R2_PUBLIC_URL }}
+          # ── 播客資料
+          POD_TITLE:            ${{ secrets.POD_TITLE }}
+          POD_AUTHOR:           ${{ secrets.POD_AUTHOR }}
+          POD_EMAIL:            ${{ secrets.POD_EMAIL }}      # ← 新增這行
+          POD_DESC:             ${{ secrets.POD_DESC }}
+
+      - name: Commit and push updated feed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add feed.xml episodes_queue.json
+          git diff --staged --quiet || git commit -m "自動發布：更新 RSS feed [skip ci]"
+          git push
