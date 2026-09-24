@@ -3,109 +3,64 @@
      xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" 
      xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>知識點日曆</title>
-    <link>https://wave2gate.github.io/podcast-rss-knowhow_calender/</link>
-    <description>備考求職 student community STEM-tech-club Podcast RSS feed</description>
+    <title>美股科技晨報</title>
+    <link>https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/</link>
+    <description>每個交易日整理美股科技與宏觀重點，幫助投資者快速掌握市場脈動。</description>
     <language>zh-tw</language>
     <itunes:author>wave2gate</itunes:author>
+    <itunes:owner>
+      <itunes:name>wave2gate</itunes:name>
+      <itunes:email>Wave2gate@gmail.com</itunes:email>
+    </itunes:owner>
     <itunes:type>episodic</itunes:type>
     <itunes:explicit>no</itunes:explicit>
-    <itunes:category text="Education"/>
-    <!-- 預設封面圖，後續可在 GitHub 上替換 cover.jpg 連結 -->
-    <itunes:image href="https://wave2gate.github.io/podcast-rss-knowhow_calender/cover.jpg"/>
+    <itunes:category text="Business"/>
+    <itunes:image href="https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/cover.jpg"/>
   
-    
-    
-    
-    
-    
-    
     <item>
-      <title>2026年9月24日 美股科技晨報</title>
-      <description>各位聽眾朋友好，歡迎收聽美股科技晨報，今天是 2026年9月24日，我是您的主持人。
-
-首先來看國際政經局勢，美中貿易戰的緊張氣氛出現了一絲緩解的曙光。根據貝森特的消息指出，隨著中國國家主席習近平展開國是訪問，美中雙方已達成協議，將原定於十一月到期的貿易休戰期延長至明年一月十日，這主要是為了給予北京更多時間來落實具體的交付目標。這對於跨國供應鏈的穩定性來說是一項利多，投資人可以關注後續雙方在關鍵技術與貿易壁壘上的談判進展，這將直接影響半導體與消費電子產業的營運成本。
-
-接下來我們將目光轉向債券市場，這也是近期全球金融市場最焦慮的焦點。美國十年期公債殖利率飆升至十九年來的新高，這背後的主要推手，</description>
-      <pubDate>Thu, 24 Sep 2026 01:08:44 +0000</pubDate>
-      <guid>https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260924.mp3</guid>
-      <enclosure url="https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260924.mp3" length="1873872" type="audio/mpeg"/>
-      <itunes:explicit>no</itunes:explicit>
-    </item>
-    
-<item>
       <title>2026年9月23日 美股科技晨報</title>
-      <description>各位聽眾朋友好，歡迎收聽美股科技晨報，今天是 2026年9月23日，我是您的主持人。
-
-在今天的節目一開始，我們先將目光轉向華盛頓的政策動向。川普政府目前正研擬是否禁止柴油出口，這主要是為了回應共和黨議員的訴求，希望藉此緩解期中選舉前夕，高漲的柴油價格對農民與貨運業者造成的沉重負擔。對投資人而言，這項政策若落實，將直接衝擊能源供應鏈與運輸成本，相關物流與能源類股的波動風險將隨之升高。與此同時，川普政府也針對歐巴馬健保採取了強硬手段，以涉嫌詐欺為由取消了約七十六萬人的註冊資格，副總統范斯領導的專案小組預估，此舉將為國庫節省約二十二億美元的補貼支出。這顯示政府在財政控管上正展現更積極的態度，投資人</description>
+      <description>各位聽眾朋友好，歡迎收聽美股科技晨報，今天是 2026年9月23日，我是您的主持人。在今天的節目一開始，我們先將目光轉向華盛頓的政策動向。川普政府目前正研擬是否禁止柴油出口，這主要是為了回應共和黨議員的訴求，希望藉此緩解期中選舉前夕，高漲的柴油價格對農民與貨運業者造成的沉重負擔。</description>
       <pubDate>Wed, 23 Sep 2026 01:08:56 +0000</pubDate>
       <guid>https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260923.mp3</guid>
       <enclosure url="https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260923.mp3" length="2047680" type="audio/mpeg"/>
       <itunes:explicit>no</itunes:explicit>
     </item>
-    
-<item>
+
+    <item>
       <title>2026年9月22日 美股科技晨報</title>
-      <description>各位聽眾朋友好，歡迎收聽美股科技晨報，今天是 2026年9月22日，我是您的主持人。
-
-首先來看全球市場的最新動態，雖然近期美股大盤表現亮眼，看似漲勢凌厲，但市場內部卻出現了自 1999 年以來罕見的警訊。數據顯示，儘管標普 500 指數正逼近歷史新高，但令人擔憂的是，目前約有 60% 的成分股，其實都還處於距離歷史高點下跌超過 20% 的技術性熊市區域。這提醒投資人，指數的繁榮可能掩蓋了市場廣度不足的隱憂，操作上切勿過度追高，應更加關注個股的基本面體質。
-
-在科技板塊方面，Meta 旗下的 AI 助手 Muse 成為了市場焦點，其下載量在推出後的短時間內迅速飆升，甚至在美國與加拿大的表現超越</description>
+      <description>各位聽眾朋友好，歡迎收聽美股科技晨報，今天是 2026年9月22日，我是您的主持人。首先來看全球市場的最新動態，雖然近期美股大盤表現亮眼，看似漲勢凌厲，但市場內部卻出現了自 1999 年以來罕見的警訊。</description>
       <pubDate>Tue, 22 Sep 2026 01:08:07 +0000</pubDate>
       <guid>https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260922.mp3</guid>
       <enclosure url="https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260922.mp3" length="1599696" type="audio/mpeg"/>
       <itunes:explicit>no</itunes:explicit>
     </item>
-    
-<item>
+
+    <item>
       <title>2026年9月21日 美股科技晨報</title>
-      <description>各位聽眾朋友好，歡迎收聽美股科技晨報，今天是 2026年9月21日，我是您的主持人。
-
-首先來看全球市場的焦點，本週最重要的重頭戲，莫過於即將在9月24日登場的川習會。目前市場氣氛顯得審慎樂觀，亞洲股市與美股期貨在今日雙雙走高，投資人都在屏息以待，希望這場峰會能針對科技霸權與貿易摩擦釋出和解訊號。與此同時，美國財政部長貝森特已經先行與中國副總理何立峰進行了會晤，貝森特形容這次對話相當成功，這無疑為即將到來的領袖峰會注入了一劑強心針。對於投資人來說，美中關係的緩和將直接影響全球供應鏈的穩定性，建議您持續關注峰會後的聯合聲明，這將是決定第四季市場風險偏好的關鍵指標。
-
-接下來我們將目光轉向宏觀經濟</description>
+      <description>各位聽眾朋友好，歡迎收聽美股科技晨報，今天是 2026年9月21日，我是您的主持人。首先來看全球市場的焦點，本週最重要的重頭戲，莫過於即將在9月24日登場的川習會。</description>
       <pubDate>Mon, 21 Sep 2026 01:09:18 +0000</pubDate>
       <guid>https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260921.mp3</guid>
       <enclosure url="https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260921.mp3" length="1724256" type="audio/mpeg"/>
       <itunes:explicit>no</itunes:explicit>
     </item>
-    
-<item>
+
+    <item>
       <title>2026年9月20日 美股科技晨報</title>
-      <description>各位聽眾朋友好，歡迎收聽美股科技晨報，今天是 2026年9月20日，我是您的主持人。
-
-週末剛過，全球市場的脈動依然緊湊，今天我們為您整理了從華爾街到矽谷，再到地緣政治最前線的關鍵資訊。首先來看美國消費者信心與宏觀經濟的矛盾現象。根據高盛經濟學家布里格斯的分析，儘管美國經濟數據表現穩健，但消費者信心卻持續低迷，這背後反映出社會整體瀰漫著一種悲觀情緒，高盛將其歸因於幸福感的下降。對於投資人來說，這種消費心態與經濟基本面的脫節，可能會導致零售板塊在未來幾季面臨波動，建議您在佈局消費類股時，需更加留意終端需求的真實動能。
-
-接下來，我們關注到華府的政治動態。川普政府近期對媒體採取強硬手段，包括MS </description>
+      <description>各位聽眾朋友好，歡迎收聽美股科技晨報，今天是 2026年9月20日，我是您的主持人。週末剛過，全球市場的脈動依然緊湊，今天我們為您整理了從華爾街到矽谷，再到地緣政治最前線的關鍵資訊。</description>
       <pubDate>Sun, 20 Sep 2026 01:08:31 +0000</pubDate>
       <guid>https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260920.mp3</guid>
       <enclosure url="https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260920.mp3" length="1990368" type="audio/mpeg"/>
       <itunes:explicit>no</itunes:explicit>
     </item>
-    
-<item>
+
+    <item>
       <title>2026年9月19日 美股科技晨報</title>
-      <description>各位聽眾朋友好，歡迎收聽美股科技晨報，今天是 2026 年 9 月 19 日，我是您的主持人。
-
-首先來看政治與市場的動盪消息。美國前總統川普近期在社群平台上公開表示，將禁止 CNN、MS NOW 以及 Politico 等媒體進入白宮，理由是這些媒體長期散布虛假新聞與謊言。同時，川普也拋出震撼彈，計畫在格陵蘭島建立大規模軍事基地，作為與丹麥安全協議的一部分。這類政治干預媒體的言論以及地緣政治的強硬表態，往往會增加市場的不確定性，建議投資人密切關注相關政策對國防與媒體類股可能產生的波動影響。
-
-接下來，我們將目光轉向科技業，近期人工智慧領域的發展令人憂心。Google 的 Gemini 模型被</description>
+      <description>各位聽眾朋友好，歡迎收聽美股科技晨報，今天是 2026年9月19日，我是您的主持人。首先來看政治與市場的動盪消息。川普近期在社群平台上公開表示，將禁止 CNN 等媒體進入白宮，同時計畫在格陵蘭島建立大規模軍事基地。</description>
       <pubDate>Sat, 19 Sep 2026 01:07:56 +0000</pubDate>
       <guid>https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260919.mp3</guid>
       <enclosure url="https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260919.mp3" length="1625904" type="audio/mpeg"/>
       <itunes:explicit>no</itunes:explicit>
     </item>
-    
-<item>
-      <title>2026年9月19日 美股科技晨報</title>
-      <description>各位聽眾朋友好，歡迎收聽美股科技晨報，今天是 2026年9月19日，我是您的主持人。
 
-首先來看政治與宏觀經濟的最新動態，川普近期在社群媒體上公開表示，將禁止微軟新聞、CNN 以及 Politico 等主流媒體進入白宮，理由是這些媒體長期散布虛假新聞與謊言。這項舉動再度引發市場對於媒體產業監管與資訊透明度的討論，投資人需留意相關媒體股的波動風險。此外，川普也宣布美國計畫在格陵蘭島建立大規模軍事存在，作為與丹麥安全協議的一部分，儘管歐盟先前曾對此表示反對，但這項地緣政治動作仍值得關注。而在金融政策方面，聯準會官員凱文沃什近期針對利率政策發表了關鍵談話，市場正密切解讀其言論，揣測聯準會未來升息路徑</description>
-      <pubDate>Sat, 19 Sep 2026 00:42:18 +0000</pubDate>
-      <guid>https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260919.mp3</guid>
-      <enclosure url="https://pub-ac082a3f79b84343bc7b03ccadea7892.r2.dev/ep_20260919.mp3" length="1556064" type="audio/mpeg"/>
-      <itunes:explicit>no</itunes:explicit>
-    </item>
-    
 </channel>
 </rss>
